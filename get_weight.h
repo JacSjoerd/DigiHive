@@ -1,23 +1,27 @@
 // Include the libraries we need
 // =======for scale==========
-#include <HX711.h>
+#include <Q2HX711.h>
+#include "digitalpin_def.h"
 
 //scale
 // sensor specific
-#define calibration_factor -43// set co constant after calibration
-#define zero_factor -262900 //set to constant after calibration
 
-HX711 scale(hx711_data_pin, hx711_clock_pin);
+Q2HX711 scale(hx711_data_pin, hx711_clock_pin);
 
 //scale
-float currentWeight = 0;
+float averageWeight = 0;
 /***********Reading and sending data*******/
-static void sampleWeight()
-{ yield();
+float weight() { 
   Serial.print("Reading weight: ");
-  // double read value because of only 2 sensors
-  currentWeight = 2* scale.get_units(5); //reads 5 times and gets average with scale factor
-  Serial.print(currentWeight);
+  for (int i = 0; i < 5; i++) {
+    averageWeight +=  scale.read(); //reads 5 times and gets average with scale factor
+  }
+
+  averageWeight /= 5;
+  
+  Serial.print(averageWeight);
   Serial.print(" grams"); 
   Serial.println();
+
+  return averageWeight;
 } 

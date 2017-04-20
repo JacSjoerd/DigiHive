@@ -17,6 +17,9 @@
 #include "get_mqtt.h"
 
 
+float calibration_factor = 22;  // set co constant to calibrate
+float zero_factor = 0;          // read once at start for 0 calibration
+
 //====objects 
 //WiFiClient defined in get_mqtt.h
 //WiFiClient  client;
@@ -58,39 +61,35 @@ void setup() {
     delay(100);
   dht.begin(); 
 
-// The HX711 functions do not yield. Watchdog would reset
-  scale.set_scale(2158.45f); 
-  scale.set_scale(calibration_factor); //Adjust to this calibration factor
-  scale.set_offset(zero_factor);
+  // The HX711 functions do not yield. Watchdog would reset
+  zero_factor = scale.read();
  // scale.tare(); 
    }
 
 void loop() {
-//  reads temperature and humidity
+  //  reads temperature and humidity
   sampleTempHum();
   yield();
-// reads temperature OneWire
+  // reads temperature OneWire
   sampleTemperature();
 
-// gets weight
- sampleWeight();
-//write all fields to ThingSpeak
-//    writeAllFields();
+  // gets weight
+  weight();
+  //write all fields to ThingSpeak
+  //    writeAllFields();
 
-// this is mqtt part
- if (!client.connected()) {
+  // this is mqtt part
+  if (!client.connected()) {
     reconnect();
     Serial.println("Reconecting...");
   }
   client.loop();
   writeMqttFields();   // write fields to MQTT
   
-//  delay(20000);
-   Serial.println("begin");
-    Serial.println("Loop1");
-    ESP.deepSleep(3600*1000000,WAKE_RF_DEFAULT);
-    delay(100);
-  // put your main code here, to run repeatedly:
+  Serial.println("begin");
+  Serial.println("Loop");
+//  ESP.deepSleep(3600*1000000,WAKE_RF_DEFAULT);
+  delay(100);
 
 }
 //===============functions==============

@@ -1,7 +1,7 @@
 #include <PubSubClient.h>
 
 //Prepare Mqtt connection data
-const char *MQTTBroker = "digihive.nl";
+const char *MQTTBroker = "5.189.151.254";
 uint16_t port = 1883;  //default port
 
 // variable chip ID
@@ -69,8 +69,8 @@ static void writeMqttFields(){
       Serial.println("Published DHT hum");
      };}
 
-  if (currentWeight >0){ 
-  dtostrf(currentWeight,6,0,msg);
+  if (averageWeight >0){ 
+  dtostrf(averageWeight,6,0,msg);
   Serial.println(msg);
   if (client.publish(Topic_weight, msg)) {
 //    callback(Topic_weight);
