@@ -6,8 +6,9 @@
 //See details about deep sleep ESP -  http://www.esp8266.com/viewtopic.php?f=6&t=6494
 //***********************************************************8
 
-#include <ESP8266WiFi.h>         //https://github.com/esp8266/Arduino
+//011#include <ESP8266WiFi.h>         //https://github.com/esp8266/Arduino
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
+#include <PubSubClient.h>
 
 // user libs
 #include "digitalpin_def.h" //definition of pins
@@ -20,42 +21,17 @@
 float calibration_factor = 22;  // set co constant to calibrate
 float zero_factor = 0;          // read once at start for 0 calibration
 
-//====objects 
-//WiFiClient defined in get_mqtt.h
-//WiFiClient  client;
-//WiFiClient espClient;
-/*
-static void writeAllFields(){
-  // write user defined fields to ThingSpeak
-  if (!isnan(temp_DHT)){
-   ThingSpeak.setField(1, temp_DHT);}
-  if (!isnan(hum_DHT)){
-   ThingSpeak.setField(2, hum_DHT);}
-  if (nDeviceCount > 0) {
-  for (int i=0; i < nDeviceCount; i++) {   ThingSpeak.setField( i+1+2, tempC[i]); }
-  }
-    ThingSpeak.setField( 5, currentWeight);
-    
-  Serial.print("Writing to the cloud: ");
-    int rc = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
-    Serial.println(String("Post rc=")+rc);
-// 
-}*/
 //============================================
 void setup() {
-     // put your setup code here, to run once:
-    Serial.begin(115200);
-    myWiFiSetup();
-//    yield();
-    delay(1000);
-//
-//  ThingSpeak.begin(espClient);
-//  Serial.println("ThingSpeak client connected"); 
-//
-  start_mqtt();
+  // put your setup code here, to run once:
+  Serial.begin(115200);
+  myWiFiSetup();
+  delay(1000);
+
+
   Serial.println("MQTT client connected"); 
   create_topics();
-//   
+   
   tempSensor.begin();
   findDeviceAddr();   // locate OneWire devices on the bus
     delay(100);
