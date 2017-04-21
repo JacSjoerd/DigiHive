@@ -74,16 +74,6 @@ static void writeMqttFields(){
     }
   }
 
-  if (averageWeight >0){ 
-    dtostrf(averageWeight,6,0,msg);
-    Serial.println(msg);
-    if (client.publish(Topic_weight, msg)) {
-//      callback(Topic_weight);
-//      Serial.println(sprintf("Published value %s to topic %s",msg,Topic_weight));  //publish
-      Serial.println("Published weight");
-    }
-  }
- 
   for (int i=0; i < nDeviceCount; i++)
   {
     dtostrf(tempC[i],2,2,msg);

@@ -14,12 +14,13 @@
 #include "digitalpin_def.h" //definition of pins
 #include "get_onewire.h"
 #include "get_dht.h"
-#include "get_weight.h"
+#include "weight.h"
 #include "get_mqtt.h"
 
 
 float calibration_factor = 22;  // set co constant to calibrate
 float zero_factor = 0;          // read once at start for 0 calibration
+Weight cWeight(hx711_data_pin, hx711_clock_pin);
 
 //============================================
 void setup() {
@@ -34,13 +35,14 @@ void setup() {
    
   tempSensor.begin();
   findDeviceAddr();   // locate OneWire devices on the bus
-    delay(100);
+  delay(100);
   dht.begin(); 
 
-  // The HX711 functions do not yield. Watchdog would reset
-  zero_factor = scale.read();
- // scale.tare(); 
-   }
+  cWeight.calibrate(weightFactor);
+  Serial.print("Point zero = ");
+  Serial.println(cWeight.getPointZero());
+
+}
 
 void loop() {
   //  reads temperature and humidity
@@ -49,8 +51,11 @@ void loop() {
   // reads temperature OneWire
   sampleTemperature();
 
-  // gets weight
-  weight();
+  int measuredWeight = cWeight.read();
+  Serial.print("Measured weight: ");
+  Serial.print(measuredWeight);
+  Serial.println("gr.");
+  
   //write all fields to ThingSpeak
   //    writeAllFields();
 
@@ -60,12 +65,10 @@ void loop() {
     Serial.println("Reconecting...");
   }
   client.loop();
-  writeMqttFields();   // write fields to MQTT
+//  writeMqttFields();   // write fields to MQTT
   
-  Serial.println("begin");
-  Serial.println("Loop");
 //  ESP.deepSleep(3600*1000000,WAKE_RF_DEFAULT);
-  delay(100);
+  delay(1000);
 
 }
 //===============functions==============
