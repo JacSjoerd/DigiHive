@@ -9,5 +9,6 @@
 // define pin for HX711 scale controller
 #define hx711_data_pin 12  // GPIOI2  
 #define hx711_clock_pin 14 // GPIOI4
+#define weightFactor 22 // factor to convert reading to gram
 
 #endif DIGITALPIN_DEF_H
