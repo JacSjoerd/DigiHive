@@ -12,18 +12,13 @@ Weight::~Weight()
 	
 }
 
-void Weight::calibrate()
-{
-  pointZero = read();
-}
-
 void Weight::calibrate(long factor)
 {
   adjustmentFactor = factor;
   pointZero = Q2HX711::read();
 }
 
-long Weight::read() 
+float Weight::read() 
 {
   long latestWeight = 0;
 

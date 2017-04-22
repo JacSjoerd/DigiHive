@@ -15,56 +15,54 @@
 #include "get_onewire.h"
 #include "get_dht.h"
 #include "weight.h"
-#include "get_mqtt.h"
+#include "mqtt.h"
 
-
-float calibration_factor = 22;  // set co constant to calibrate
-float zero_factor = 0;          // read once at start for 0 calibration
-Weight cWeight(hx711_data_pin, hx711_clock_pin);
+WiFiClient espClient;
+MQTT mqttClient(espClient);
+Weight weight(hx711_data_pin, hx711_clock_pin);
 
 //============================================
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
   myWiFiSetup();
   delay(1000);
-
-
-  Serial.println("MQTT client connected"); 
-  create_topics();
+  
+  mqttClient.initialize();
    
   tempSensor.begin();
   findDeviceAddr();   // locate OneWire devices on the bus
   delay(100);
   dht.begin(); 
-
-  cWeight.calibrate(weightFactor);
-  Serial.print("Point zero = ");
-  Serial.println(cWeight.getPointZero());
-
+  weight.calibrate(weightFactor);
 }
 
 void loop() {
+
+  if (mqttClient.reconnect() == MQTT_CONNECTED) {
+      Serial.println("Connection to server OK!");
+  }
+
+
   //  reads temperature and humidity
   sampleTempHum();
-  yield();
   // reads temperature OneWire
   sampleTemperature();
 
-  int measuredWeight = cWeight.read();
+  float measuredWeight = weight.read();
   Serial.print("Measured weight: ");
   Serial.print(measuredWeight);
   Serial.println("gr.");
+  mqttClient.publish(TOPIC_WEIGHT, measuredWeight);
   
   //write all fields to ThingSpeak
   //    writeAllFields();
 
   // this is mqtt part
-  if (!client.connected()) {
-    reconnect();
+  if (!mqttClient.connected()) {
+    mqttClient.reconnect();
     Serial.println("Reconecting...");
   }
-  client.loop();
+
 //  writeMqttFields();   // write fields to MQTT
   
 //  ESP.deepSleep(3600*1000000,WAKE_RF_DEFAULT);

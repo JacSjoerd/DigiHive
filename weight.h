@@ -13,15 +13,14 @@ public:
 	virtual ~Weight();
 
   // calibrate the HX711 to 0gr and set a factor to convert to gr.
-  void calibrate();
-  void calibrate(long factor);
+  void calibrate(long factor=0);
 
   // get functions for the private data
   long getPointZero() {return pointZero;};
   long getAdjustmentFactor() {return adjustmentFactor;};
 
   // Get the average data from the HX711 over 5 readings and adjust according the calibration values 
-  long read();
+  float read();
 }; 
 
 #endif WEIGHT_H
