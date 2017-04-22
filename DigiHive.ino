@@ -8,18 +8,20 @@
 
 //011#include <ESP8266WiFi.h>         //https://github.com/esp8266/Arduino
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
-#include <PubSubClient.h>
 
 // user libs
 #include "digitalpin_def.h" //definition of pins
-#include "get_onewire.h"
-#include "get_dht.h"
-#include "weight.h"
 #include "mqtt.h"
+#include "DHT.h"
+#include "temperature.h"
+#include "weight.h"
+
 
 WiFiClient espClient;
 MQTT mqttClient(espClient);
-Weight weight(hx711_data_pin, hx711_clock_pin);
+DHT dht22(DHT_PIN, DHTTYPE);
+Temperature temperature(DS18B20_PIN);
+Weight weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
 
 //============================================
 void setup() {
@@ -28,12 +30,8 @@ void setup() {
   delay(1000);
   
   mqttClient.initialize();
-   
-  tempSensor.begin();
-  findDeviceAddr();   // locate OneWire devices on the bus
-  delay(100);
-  dht.begin(); 
-  weight.calibrate(weightFactor);
+  dht22.begin();
+  weight.calibrate(WEIGHTFACTOR);
 }
 
 void loop() {
@@ -42,31 +40,41 @@ void loop() {
       Serial.println("Connection to server OK!");
   }
 
+  float measuredValue = 0;
 
-  //  reads temperature and humidity
-  sampleTempHum();
-  // reads temperature OneWire
-  sampleTemperature();
-
-  float measuredWeight = weight.read();
-  Serial.print("Measured weight: ");
-  Serial.print(measuredWeight);
-  Serial.println("gr.");
-  mqttClient.publish(TOPIC_WEIGHT, measuredWeight);
+  // read temperature and humidity of DHT22
+  measuredValue = dht22.readTemperature();
+  Serial.print("Measured temperature: ");
+  Serial.print(measuredValue);
+  Serial.println("C.");
+  mqttClient.publish(TOPIC_IN_TEMP2, measuredValue);
+  measuredValue = dht22.readHumidity();
+  Serial.print("Measured humidity: ");
+  Serial.print(measuredValue);
+  Serial.println("%.");
+  mqttClient.publish(TOPIC_IN_HUMID1, measuredValue);
   
-  //write all fields to ThingSpeak
-  //    writeAllFields();
-
-  // this is mqtt part
-  if (!mqttClient.connected()) {
-    mqttClient.reconnect();
-    Serial.println("Reconecting...");
+  // read temperature of all DS18B20 (upto 3)
+  int devices = temperature.deviceCount();
+  Serial.print(devices);
+  Serial.println(" one wire devices found.");
+  for (int i = 0; i < devices ;i++) {
+    measuredValue = temperature.read(i);  
+    Serial.print("Measured temperature: ");
+    Serial.print(measuredValue);
+    Serial.println("C.");
+    mqttClient.publish(static_cast<Topic>(TOPIC_IN_TEMP1 + i), measuredValue);
   }
 
-//  writeMqttFields();   // write fields to MQTT
+  // reads weight
+  measuredValue = weight.read();
+  Serial.print("Measured weight: ");
+  Serial.print(measuredValue);
+  Serial.println("gr.");
+  mqttClient.publish(TOPIC_WEIGHT, measuredValue);
   
 //  ESP.deepSleep(3600*1000000,WAKE_RF_DEFAULT);
-  delay(1000);
+  delay(10000);
 
 }
 //===============functions==============
