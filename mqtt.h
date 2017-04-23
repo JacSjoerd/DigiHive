@@ -25,11 +25,11 @@ class MQTT : public PubSubClient
       "000000/level1/humidity",
       "000000/level2/humidity",
       "000000/outside/humidity",
-      "000000/weigth"
+      "000000/weight"
     };
     Client* mClient;
     WiFiClient espClient;
-    
+    WiFiManager wifiManager;
   public:
     MQTT();
     ~MQTT();

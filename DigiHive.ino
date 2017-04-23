@@ -14,7 +14,7 @@ Weight weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
 
 //============================================
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
 //  myWiFiSetup();
   delay(1000);
   
@@ -70,6 +70,6 @@ void loop() {
 
   // put ESP8266 to sleep for 10 mins to minimize power consumption
   ESP.deepSleep(600*1000000,WAKE_RF_DEFAULT);
-  delay(1000);
+  delay(5000);
 }
 

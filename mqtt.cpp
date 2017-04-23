@@ -22,6 +22,8 @@ void MQTT::initialize()
   wifiManager.autoConnect("DigiHive");
   Serial.println("Connected to Wifi...");
 
+  setServer("digihive.nl", 1883);
+
   char myChipId[10] = "";
   sprintf(myChipId, "%06X", ESP.getChipId());
 
