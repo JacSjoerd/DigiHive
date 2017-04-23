@@ -1,10 +1,11 @@
 #include "mqtt.h"
-#include <PubSubClient.h>
+#include <PubSubClient.h>     // https://github.com/knolleary/pubsubclient
+#include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
 
-MQTT::MQTT(Client& client)
-  : PubSubClient("digihive.nl", 1883, client)
+MQTT::MQTT()
+  : PubSubClient("digihive.nl", 1883, espClient)
 {
-
+  
 }
 
 MQTT::~MQTT()
@@ -14,6 +15,13 @@ MQTT::~MQTT()
 
 void MQTT::initialize()
 {
+  //WiFiManager
+  //Local intialization. Once its business is done, there is no need to keep it around
+  WiFiManager wifiManager;
+  // wifiManager.resetSettings();
+  wifiManager.autoConnect("DigiHive");
+  Serial.println("Connected to Wifi...");
+
   char myChipId[10] = "";
   sprintf(myChipId, "%06X", ESP.getChipId());
 

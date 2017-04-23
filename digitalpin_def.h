@@ -13,8 +13,10 @@
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
 
 // define pin for HX711 scale controller
-#define HX711_DATA_PIN 12  // GPIOI2  
-#define HX711_CLOCK_PIN 14 // GPIOI4
+// #define HX711_DATA_PIN 12  // GPIOI2  ESP8266
+// #define HX711_CLOCK_PIN 14 // GPIOI4  ESP8266
+#define HX711_DATA_PIN D6  // GPIOI2  NodeMCU
+#define HX711_CLOCK_PIN D5 // GPIOI4  NodeMCU
 #define WEIGHTFACTOR 21 // factor to convert reading to gram
 
 #endif DIGITALPIN_DEF_H

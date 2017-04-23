@@ -1,5 +1,5 @@
 #include "weight.h"
-#include <Q2HX711.h>
+#include <Q2HX711.h>      // https://github.com/queuetue/Q2-HX711-Arduino-Library
 
 Weight::Weight(byte output_pin, byte clock_pin)
   : Q2HX711(output_pin, clock_pin)

@@ -1,7 +1,8 @@
 #ifndef MQTT_H
 #define MQTT_H
 
-#include <PubSubClient.h>
+#include <PubSubClient.h>     // https://github.com/knolleary/pubsubclient
+#include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
 
 enum Topic {
   TOPIC_IN_TEMP1,
@@ -27,9 +28,10 @@ class MQTT : public PubSubClient
       "000000/weigth"
     };
     Client* mClient;
+    WiFiClient espClient;
     
   public:
-    MQTT(Client& client);
+    MQTT();
     ~MQTT();
 
     void initialize();

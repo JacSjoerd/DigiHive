@@ -3,7 +3,7 @@
 #define REQUIRESALARMS false
 
 #include <OneWire.h>
-#include <DallasTemperature.h>
+#include <DallasTemperature.h>      // https://github.com/milesburton/Arduino-Temperature-Control-Library
 
 const int MAX_DEVICES = 3;
 

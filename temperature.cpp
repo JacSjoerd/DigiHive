@@ -1,6 +1,6 @@
 #include "temperature.h"
 #include <OneWire.h>
-#include <DallasTemperature.h>
+#include <DallasTemperature.h>      // https://github.com/milesburton/Arduino-Temperature-Control-Library
 
 Temperature::Temperature(int pinDefinition)
 {

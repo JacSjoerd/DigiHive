@@ -1,7 +1,7 @@
 #ifndef WEIGHT_H
 #define WEIGHT_H
 
-#include <Q2HX711.h>
+#include <Q2HX711.h>      // https://github.com/queuetue/Q2-HX711-Arduino-Library
 
 class Weight : public Q2HX711
 {
