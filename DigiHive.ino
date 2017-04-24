@@ -14,7 +14,7 @@ Weight weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
 
 //============================================
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(1000);
   
   mqttClient.initialize();

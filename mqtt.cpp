@@ -2,9 +2,9 @@
 #include <PubSubClient.h>     // https://github.com/knolleary/pubsubclient
 #include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
 
-MQTT::MQTT(const char* server, uint8_t port)
-  : PubSubClient(server, port, espClient), mqttServer(server), mqttPort(port)
-{  
+MQTT::MQTT(const char* mqtt_server, int mqtt_port)
+  :  mqttServer(mqtt_server), mqttPort(mqtt_port), PubSubClient(mqtt_server, mqtt_port, espClient)
+{
 }
 
 MQTT::~MQTT()
