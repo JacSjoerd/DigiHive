@@ -26,6 +26,7 @@ float Weight::read()
   for (int i = 0; i < 5; i++)
   {
     latestWeight = latestWeight + Q2HX711::read();
+    delay(1000);
   }
   latestWeight = latestWeight / 5;
   
