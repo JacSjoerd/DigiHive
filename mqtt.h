@@ -30,8 +30,10 @@ class MQTT : public PubSubClient
     Client* mClient;
     WiFiClient espClient;
     WiFiManager wifiManager;
+    const char* mqttServer;
+    uint8_t mqttPort;
   public:
-    MQTT();
+    MQTT(const char* server, uint8_t port);
     ~MQTT();
 
     void initialize();

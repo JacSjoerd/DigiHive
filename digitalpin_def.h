@@ -2,6 +2,10 @@
 #ifndef DIGITALPIN_DEF_H
 #define DIGITALPIN_DEF_H
 
+// define the MQTT server
+#define MQTT_SERVER "digihive.nl"
+#define MQTT_PORT 1883
+
 //define pin for DS18B20
 #define DS18B20_PIN 4 // GPIO4
 

@@ -7,7 +7,7 @@
 #include "temperature.h"
 #include "weight.h"
 
-MQTT mqttClient;
+MQTT mqttClient(MQTT_SERVER, MQTT_PORT);
 DHT dht22(DHT_PIN, DHTTYPE);
 Temperature temperature(DS18B20_PIN);
 Weight weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
@@ -15,7 +15,6 @@ Weight weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
 //============================================
 void setup() {
   Serial.begin(9600);
-//  myWiFiSetup();
   delay(1000);
   
   mqttClient.initialize();

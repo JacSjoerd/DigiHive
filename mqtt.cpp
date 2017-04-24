@@ -2,15 +2,13 @@
 #include <PubSubClient.h>     // https://github.com/knolleary/pubsubclient
 #include <WiFiManager.h>      // https://github.com/tzapu/WiFiManager
 
-MQTT::MQTT()
-  : PubSubClient("digihive.nl", 1883, espClient)
-{
-  
+MQTT::MQTT(const char* server, uint8_t port)
+  : PubSubClient(server, port, espClient), mqttServer(server), mqttPort(port)
+{  
 }
 
 MQTT::~MQTT()
-{
-  
+{  
 }
 
 void MQTT::initialize()
@@ -22,7 +20,7 @@ void MQTT::initialize()
   wifiManager.autoConnect("DigiHive");
   Serial.println("Connected to Wifi...");
 
-  setServer("digihive.nl", 1883);
+  setServer(mqttServer, mqttPort);
 
   char myChipId[10] = "";
   sprintf(myChipId, "%06X", ESP.getChipId());
