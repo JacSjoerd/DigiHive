@@ -29,7 +29,7 @@ class MQTT : public PubSubClient
     };
     Client* mClient;
     WiFiClient espClient;
-    WiFiManager wifiManager;
+    char  arduinoClientName[40];      // ID to connect to the MQTT server, must be unique on the server
     const char* mqttServer;
     int mqttPort;
     
@@ -38,6 +38,7 @@ class MQTT : public PubSubClient
     ~MQTT();
 
     void initialize();
+    void initialize(const char* wifiSSID, const char* wifiPassword);
     int reconnect();
     void publish(Topic topic, double message);
   

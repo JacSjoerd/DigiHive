@@ -3,7 +3,7 @@
 #define DIGITALPIN_DEF_H
 
 // define the MQTT server
-#define MQTT_SERVER "digihive.nl"
+#define MQTT_SERVER "5.189.151.254"
 #define MQTT_PORT 1883
 
 //define pin for DS18B20
@@ -22,5 +22,9 @@
 // #define HX711_DATA_PIN D6  // GPIOI2  NodeMCU
 // #define HX711_CLOCK_PIN D5 // GPIOI4  NodeMCU
 #define WEIGHTFACTOR 21 // factor to convert reading to gram
+
+// define fixed network
+//#define WIFISSID "network"
+//#define WIFIPASSWORD "password"
 
 #endif DIGITALPIN_DEF_H

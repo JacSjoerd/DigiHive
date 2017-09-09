@@ -1,5 +1,5 @@
 /***************** DigiHive *****************/
-
+#include <ESP8266WiFi.h>
 // user libs
 #include "digitalpin_def.h" //definition of pins
 #include "mqtt.h"
@@ -16,8 +16,13 @@ Weight weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
 void setup() {
   Serial.begin(115200);
   delay(1000);
-  
+
+#ifdef WIFISSID
+  mqttClient.initialize(WIFISSID, WIFIPASSWORD);
+#else
   mqttClient.initialize();
+#endif
+
   dht22.begin();
   weight.calibrate(WEIGHTFACTOR);
 }
@@ -68,7 +73,7 @@ void loop() {
   }
 
   // put ESP8266 to sleep for 10 mins to minimize power consumption
-  ESP.deepSleep(600*1000000,WAKE_RF_DEFAULT);
-  delay(5000);
+//  ESP.deepSleep(600*1000000,WAKE_RF_DEFAULT);
+  delay(10000);
 }
 
