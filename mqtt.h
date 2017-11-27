@@ -11,6 +11,7 @@ enum Topic {
   TOPIC_IN_HUMID1,
   TOPIC_IN_HUMID2,
   TOPIC_OUT_HUMID,
+  TOPIC_VOLTAGE,
   TOPIC_WEIGHT,
   NUM_TOPICS
 };
@@ -25,6 +26,7 @@ class MQTT : public PubSubClient
       "000000/level1/humidity",
       "000000/level2/humidity",
       "000000/outside/humidity",
+      "000000/voltage",
       "000000/weight"
     };
     Client* mClient;
@@ -38,7 +40,6 @@ class MQTT : public PubSubClient
     ~MQTT();
 
     void initialize();
-    void initialize(const char* wifiSSID, const char* wifiPassword);
     int reconnect();
     void publish(Topic topic, double message);
   

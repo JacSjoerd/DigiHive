@@ -23,8 +23,4 @@
 // #define HX711_CLOCK_PIN D5 // GPIOI4  NodeMCU
 #define WEIGHTFACTOR 21 // factor to convert reading to gram
 
-// define fixed network
-//#define WIFISSID "network"
-//#define WIFIPASSWORD "password"
-
 #endif DIGITALPIN_DEF_H

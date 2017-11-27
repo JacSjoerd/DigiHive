@@ -11,6 +11,7 @@ MQTT mqttClient(MQTT_SERVER, MQTT_PORT);
 DHT dht22(DHT_PIN, DHTTYPE);
 Temperature temperature(DS18B20_PIN);
 Weight weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
+ADC_MODE(ADC_VCC); 
 
 //============================================
 void setup() {
@@ -33,6 +34,15 @@ void loop() {
     Serial.println("Connection to server OK!");
 
     float measuredValue = 0;
+
+    // read voltage at ESP8266 
+    measuredValue = ESP.getVcc() / 1000.0;
+    if (isnormal(measuredValue)) {
+      Serial.print("Measured voltage: ");
+      Serial.print(measuredValue);
+      Serial.println("V");
+      mqttClient.publish(TOPIC_VOLTAGE, measuredValue);
+    }
 
     // read temperature and humidity of DHT22
     measuredValue = dht22.readTemperature();
@@ -73,7 +83,7 @@ void loop() {
   }
 
   // put ESP8266 to sleep for 10 mins to minimize power consumption
-//  ESP.deepSleep(600*1000000,WAKE_RF_DEFAULT);
-  delay(10000);
+  // time is in micro seconds
+  ESP.deepSleep(600*1000000,WAKE_RF_DEFAULT);
 }
 
