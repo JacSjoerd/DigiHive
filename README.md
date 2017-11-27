@@ -2,6 +2,7 @@
 Measuring bee hives
 
 Currently measuring:
+* Voltage at the ESP8266
 * Weight of the total bee hive
 * Temperature at 2 places inside the bee hive
 * Temperature outside the bee hive
