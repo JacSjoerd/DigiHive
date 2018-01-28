@@ -1,16 +1,19 @@
 /***************** DigiHive *****************/
 #include <ESP8266WiFi.h>
+#include <hx711.h>
+
 // user libs
 #include "digitalpin_def.h" //definition of pins
 #include "mqtt.h"
 #include "DHT.h"
 #include "temperature.h"
-#include "weight.h"
 
-MQTT mqttClient(MQTT_SERVER, MQTT_PORT);
-DHT dht22(DHT_PIN, DHTTYPE);
+using namespace std;
+
+MQTT        mqttClient(MQTT_SERVER, MQTT_PORT);
+DHT         dht22(DHT_PIN, DHTTYPE);
 Temperature temperature(DS18B20_PIN);
-Weight weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
+Hx711       weight(HX711_DATA_PIN, HX711_CLOCK_PIN);
 ADC_MODE(ADC_VCC); 
 
 //============================================
@@ -18,14 +21,13 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
 
-#ifdef WIFISSID
-  mqttClient.initialize(WIFISSID, WIFIPASSWORD);
-#else
+  // Start Wifi
   mqttClient.initialize();
-#endif
 
   dht22.begin();
-  weight.calibrate(WEIGHTFACTOR);
+
+  weight.setOffset(WEIGHTOFFSET);
+  weight.setScale(WEIGHTFACTOR);
 }
 
 void loop() {
@@ -73,7 +75,7 @@ void loop() {
     }
   
     // reads weight
-    measuredValue = weight.read();
+    measuredValue = weight.getGram();
     Serial.print("Measured weight: ");
     Serial.print(measuredValue);
     Serial.println("gr.");
@@ -84,6 +86,7 @@ void loop() {
 
   // put ESP8266 to sleep for 10 mins to minimize power consumption
   // time is in micro seconds
-  ESP.deepSleep(600*1000000,WAKE_RF_DEFAULT);
+  // ESP.deepSleep(600*1000000,WAKE_RF_DEFAULT);
+  delay(10000);
 }
 

@@ -21,6 +21,8 @@
 #define HX711_CLOCK_PIN 14 // GPIOI4  ESP8266
 // #define HX711_DATA_PIN D6  // GPIOI2  NodeMCU
 // #define HX711_CLOCK_PIN D5 // GPIOI4  NodeMCU
+
+#define WEIGHTOFFSET 0  // offset for reading weight, is when no hive is on the weighing scale
 #define WEIGHTFACTOR 21 // factor to convert reading to gram
 
 #endif DIGITALPIN_DEF_H
